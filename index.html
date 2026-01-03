@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Упрощатель текста</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+      color: #2d3748;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin: 24px 0 32px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #2c5282;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #718096;
+      font-weight: 400;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: #4299e1;
+      border-radius: 2px;
+    }
+
+    #original-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #2d3748;
+      background-color: #f8fafc;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 3px solid #cbd5e0;
+    }
+
+    #simplified-input {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      resize: vertical;
+      transition: border-color 0.3s;
+      font-family: inherit;
+    }
+
+    #simplified-input:focus {
+      outline: none;
+      border-color: #a0aec0;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    }
+
+    .progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: #4a5568;
+    }
+
+    .progress-bar-container {
+      height: 12px;
+      background: #edf2f7;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #48bb78, #4299e1);
+      width: 0%;
+      border-radius: 6px;
+      transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .progress-value {
+      font-weight: 600;
+      color: #2b6cb0;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    button {
+      background: linear-gradient(to right, #4299e1, #3182ce);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      box-shadow: 0 4px 6px rgba(66, 153, 225, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      #simplified-input {
+        min-height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Упрощатель текста</h1>
+      <p class="subtitle">ferftgt ЩЩЩЩЩ OOOOO</p>
+    </header>
+
+    <!-- Исходное предложение -->
+    <div class="card">
+      <h2>Сложное предложение</h2>
+      <p id="original-text">
+        Несмотря на то, что погода была крайне неблагоприятной, экспедиция всё же решила продолжить своё продвижение вглубь таёжных районов, дабы выполнить поставленную перед ними исследовательскую задачу.
+      </p>
+    </div>
+
+    <!-- Твой вариант -->
+    <div class="card">
+      <h2>Твой упрощённый вариант</h2>
+      <textarea id="simplified-input" placeholder="Напиши здесь упрощённую версию..."></textarea>
+    </div>
+
+    <!-- Индикатор упрощения -->
+    <div class="card">
+      <h2>Уровень упрощения</h2>
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>Насколько короче стал текст?</span>
+          <span class="progress-value" id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка -->
+    <div class="controls">
+      <button onclick="changeSentence()">Следующее предложение</button>
+    </div>
+  </div>
+
+  <script>
+    const sentences = [
+      "HBMBHBMNMN.",
+      "Ввиду того, что уровень загрязнения атмосферы превысил допустимые нормы, городские власти приняли решение о временном ограничении движения автотранспорта в центральной части мегаполиса.",
+      "Учитывая тот факт, что участник не предоставил необходимые документы в установленный срок, оргкомитет был вынужден исключить его из числа претендентов на получение гранта.",
+      "В связи с тем, что на предприятии произошёл сбой в системе электроснабжения, производственный процесс был временно приостановлен до устранения неполадок.",
+      "Поскольку студент продемонстрировал исключительные знания в области теоретической физики, его рекомендовали для участия в международной олимпиаде.",
+      "Вследствие того, что были выявлены многочисленные нарушения в ходе проверки, лицензия на осуществление деятельности была временно приостановлена компетентными органами."
+    ];
+
+    let currentSentenceIndex = 0;
+    const originalTextEl = document.getElementById("original-text");
+    const inputEl = document.getElementById("simplified-input");
+    const progressFillEl = document.getElementById("progress-fill");
+    const progressPercentEl = document.getElementById("progress-percent");
+
+    function updateProgress() {
+      const original = originalTextEl.innerText.trim();
+      const user = inputEl.value.trim();
+
+      if (!user) {
+        setProgress(0);
+        return;
+      }
+
+      const origLen = original.length;
+      const userLen = user.length;
+
+      if (userLen >= origLen) {
+        setProgress(0);
+        return;
+      }
+
+      // Максимум — 100% при сокращении в 2 раза или больше
+      const ratio = (origLen - userLen) / origLen;
+      const percent = Math.min(100, Math.floor(ratio * 200));
+
+      setProgress(percent);
+    }
+
+    function setProgress(percent) {
+      progressFillEl.style.width = percent + "%";
+      progressPercentEl.textContent = percent + "%";
+    }
+
+    function changeSentence() {
+      currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;
+      originalTextEl.innerText = sentences[currentSentenceIndex];
+      inputEl.value = "";
+      updateProgress();
+    }
+
+    inputEl.addEventListener("input", updateProgress);
+    updateProgress();
+  </script>
+
+</body>
+</html>
